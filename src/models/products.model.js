@@ -1,16 +1,22 @@
-import productsDb from '../db/products.db.js'
+import productsDb from '../db/products.db.js';
 
-function getAllProducts() {}
+async function getAllProducts() {
+  return await productsDb
+    .find({}, { '__v': 0 })
+    .sort({ name: 1 });
+}
 
-function getProduct() {}
+async function getProductById(id) {
+  return await productsDb.findById(id, 'name type');
+}
 
 async function addNewProduct(product) {
   await saveProduct(product);
 }
 
-function editProduct() {}
+function editProduct() { }
 
-function deleteProduct() {}
+function deleteProduct() { }
 
 async function saveProduct(product) {
   await productsDb.findOneAndUpdate({
@@ -22,8 +28,8 @@ async function saveProduct(product) {
 
 export {
   getAllProducts,
-  getProduct,
+  getProductById,
   addNewProduct,
   editProduct,
   deleteProduct,
-}
+};

@@ -1,17 +1,26 @@
 import * as productModel from '../models/products.model.js';
 
-function httpGetAllProducts(req, res) {
-  return res.status(200).send('Getting all the products');
+async function httpGetAllProducts(req, res) {
+  const products = await productModel.getAllProducts();
+
+  return res.status(200).json(products);
 }
 
-function httpGetProduct(req, res) {
-  return res.status(200).send(`Getting the product with id: ${req.params.id}`);
+async function httpGetProduct(req, res) {
+  const id = req.params.id;
+
+  const product = await productModel.getProductById(id);
+  
+  return res.status(200).json(product);
 }
 
 async function httpAddNewProduct(req, res) {
-  const product = req.body;
+  if (!req.body.name || !req.body.type) return res.status(400).json({ error: 'Product properties required.'});
 
-  if (!product.name || !product.type) return res.status(400).json({ error: 'Product properties required.'});
+  const product = {
+    name: req.body.name,
+    type: req.body.type,
+  }
 
   await productModel.addNewProduct(product);
 
