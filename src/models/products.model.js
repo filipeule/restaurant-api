@@ -11,20 +11,22 @@ async function getProductById(id) {
 }
 
 async function addNewProduct(product) {
-  await saveProduct(product);
-}
-
-function editProduct() { }
-
-function deleteProduct() { }
-
-async function saveProduct(product) {
-  await productsDb.findOneAndUpdate({
+  return await productsDb.findOneAndUpdate({
     name: product.name,
   }, product, {
     upsert: true,
+    new: true,
+    select: '-__v'
   });
 }
+
+async function editProduct(id, product) {
+  return await productsDb.findByIdAndUpdate(id, product, {
+    new: true,
+  });
+}
+
+function deleteProduct() { }
 
 export {
   getAllProducts,

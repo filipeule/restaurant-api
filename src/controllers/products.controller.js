@@ -17,18 +17,29 @@ async function httpGetProduct(req, res) {
 async function httpAddNewProduct(req, res) {
   if (!req.body.name || !req.body.type) return res.status(400).json({ error: 'Product properties required.'});
 
+  const productBody = {
+    name: req.body.name,
+    type: req.body.type,
+  }
+
+  const product = await productModel.addNewProduct(productBody);
+
+  return res.status(201).json(product);
+}
+
+async function httpEditProduct(req, res) {
+  const id = req.params.id;
+
+  if (!req.body.name || !req.body.type) return res.status(400).json({ error: 'New product properties required.'});
+
   const product = {
     name: req.body.name,
     type: req.body.type,
   }
 
-  await productModel.addNewProduct(product);
+  await productModel.editProduct(id, product);
 
-  return res.status(201).json(product);
-}
-
-function httpEditProduct(req, res) {
-  return res.status(204).send(`Editing product with id: ${req.params.id}`)
+  return res.status(204).json();
 }
 
 function httpDeleteProduct(req, res) {
