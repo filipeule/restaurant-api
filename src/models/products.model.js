@@ -26,7 +26,9 @@ async function editProduct(id, product) {
   });
 }
 
-function deleteProduct() { }
+async function deleteProduct(id) {
+  return await productsDb.findByIdAndDelete(id);
+}
 
 export {
   getAllProducts,

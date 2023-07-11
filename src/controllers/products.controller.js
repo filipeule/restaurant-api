@@ -42,8 +42,12 @@ async function httpEditProduct(req, res) {
   return res.status(204).json();
 }
 
-function httpDeleteProduct(req, res) {
-  return res.status(200).send(`Deleting product with id: ${req.params.id}`)
+async function httpDeleteProduct(req, res) {
+  const id = req.params.id;
+
+  await productModel.deleteProduct(id);
+
+  return res.status(204).json();
 }
 
 export {
