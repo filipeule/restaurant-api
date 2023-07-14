@@ -1,37 +1,57 @@
 import productsDb from '../db/products.db.js';
 
 async function getAllProducts() {
-  return await productsDb
-    .find({}, { '__v': 0 })
-    .sort({ name: 1 });
+  try {
+    return await productsDb
+      .find({}, { '__v': 0 })
+      .sort({ name: 1 });
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 async function getProductById(id) {
-  return await productsDb.findById(id, 'name type');
+  try {
+    return await productsDb.findById(id, 'name type');
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 async function addNewProduct(product) {
-  if (!validateProduct(product)) return;
+  try {
+    if (!validateProduct(product)) return;
   
-  return await productsDb.findOneAndUpdate({
-    name: product.name,
-  }, product, {
-    upsert: true,
-    new: true,
-    select: '-__v'
-  });
+    return await productsDb.findOneAndUpdate({
+      name: product.name,
+    }, product, {
+      upsert: true,
+      new: true,
+      select: '-__v'
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 async function editProduct(id, product) {
-  if (!validateProduct(product)) return;
+  try {
+    if (!validateProduct(product)) return;
   
-  return await productsDb.findByIdAndUpdate(id, product, {
-    new: true,
-  });
+    return await productsDb.findByIdAndUpdate(id, product, {
+      new: true,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 async function deleteProduct(id) {
-  return await productsDb.findByIdAndDelete(id);
+  try {
+    return await productsDb.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error(error);
+  }
 }
 
 function validateProduct(product) {
