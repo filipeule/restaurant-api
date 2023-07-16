@@ -51,12 +51,12 @@ async function httpEditProduct(req, res) {
   
     if (!req.body.name || !req.body.group) return res.status(400).json({ error: 'New product properties required.' });
   
-    const product = {
+    const productBody = {
       name: req.body.name,
       group: req.body.group,
     };
   
-    const newProduct = await productModel.editProduct(id, product);
+    const newProduct = await productModel.editProduct(id, productBody);
   
     if (!newProduct) return res.status(400).json({ error: 'New product properties must be in a valid format.' });
   
