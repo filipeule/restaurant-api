@@ -5,10 +5,12 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
+  group: {
     type: String,
     required: true
   }
 });
 
 export default mongoose.model('Product', productSchema);
+
+// TODO: Alterar o tipo do type para ObjectID e fazer o relacionamento toda vez que for adicionar ou ler um novo produto

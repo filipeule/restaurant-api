@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import { populateTypesCollection } from '../models/types.model.js'
+import { populateGroupsCollection } from '../models/groups.model.js'
 
 const MONGO_URL = process.env.MONGO_URL;
 
 async function startDatabase() {
   await connect();
   
-  await populateTypesCollection();
+  await populateGroupsCollection();
 }
 
 async function connect() {

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const typeSchema = mongoose.Schema({
+const groupSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
   }
 });
 
-export default mongoose.model('Type', typeSchema);
+export default mongoose.model('Group', groupSchema);

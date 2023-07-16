@@ -12,7 +12,7 @@ async function getAllProducts() {
 
 async function getProductById(id) {
   try {
-    return await productsDb.findById(id, 'name type');
+    return await productsDb.findById(id, 'name group');
   } catch (error) {
     throw new Error(error);
   }
@@ -57,7 +57,7 @@ async function deleteProduct(id) {
 function validateProduct(product) {
   const newProduct = trimProduct(product);
 
-  if (!isNaN(newProduct.name) || !isNaN(newProduct.type)) return;
+  if (!isNaN(newProduct.name) || !isNaN(newProduct.group)) return;
 
   return newProduct;
 }
