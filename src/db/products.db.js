@@ -8,10 +8,8 @@ const productSchema = new mongoose.Schema({
   group: {
     type: mongoose.ObjectId,
     ref: 'Group',
-    required: true
+    required: true,
   }
 });
 
 export default mongoose.model('Product', productSchema);
-
-// TODO: Alterar o tipo do group para ObjectID e fazer o relacionamento toda vez que for adicionar ou ler um novo produto
