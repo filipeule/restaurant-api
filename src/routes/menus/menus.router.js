@@ -15,3 +15,5 @@ menusRouter.post('/', httpCreateMenu);
 menusRouter.post('/week', httpCreateWeekMenus);
 menusRouter.put('/:id', httpEditMenu);
 menusRouter.delete('/:id', httpDeleteMenu);
+
+export default menusRouter;

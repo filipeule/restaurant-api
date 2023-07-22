@@ -1,5 +1,6 @@
 import productsDb from '../db/products.db.js';
-import groupsDb from '../db/groups.db.js';
+
+import { getGroupIdByName } from '../models/groups.model.js';
 
 async function getAllProducts() {
   try {
@@ -26,9 +27,9 @@ async function addNewProduct(product) {
 
     capitalizeFirstLetter(product);
 
-    const productGroup = await groupsDb.findOne({ name: product.group });
+    const productGroupId = await getGroupIdByName(product.group);
 
-    product.group = productGroup;
+    product.group = productGroupId;
 
     if (!product.group) return;
 
@@ -50,9 +51,9 @@ async function editProduct(id, product) {
 
     capitalizeFirstLetter(product);
 
-    const productGroup = await groupsDb.findOne({ name: product.group });
+    const productGroupId = await getGroupIdByName(product.group);
 
-    product.group = productGroup;
+    product.group = productGroupId;
 
     if (!product.group) return;
   
