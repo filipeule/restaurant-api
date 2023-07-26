@@ -2,9 +2,7 @@ import * as menuModel from '../models/menus.model.js';
 
 async function httpGetWeekMenus(req, res) {
   try {
-    const date = new Date();
-  
-    const weekMenus = await menuModel.getWeekMenus(date);
+    const weekMenus = await menuModel.getWeekMenus();
     
     return res.status(200).json(weekMenus);
   } catch (error) {
@@ -13,9 +11,18 @@ async function httpGetWeekMenus(req, res) {
   }
 }
 
-async function httpCreateMenu(req, res) { }
+async function httpCreateWeekMenus(req, res) {
+  try {
+    const weekMenus = await menuModel.createWeekMenus();
+    
+    return res.status(201).json(weekMenus);
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ error: error.message });
+  }
+}
 
-async function httpCreateWeekMenus(req, res) { }
+async function httpCreateMenu(req, res) { }
 
 async function httpEditMenu(req, res) { }
 

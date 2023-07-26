@@ -11,7 +11,12 @@ const menuSchema = mongoose.Schema({
     ref: 'Product',
     required: true,
   },
-  data: {
+  salad: {
+    type: [mongoose.ObjectId],
+    ref: 'Product',
+    required: true,
+  },
+  date: {
     type: Date,
     required: true,
     default: () => new Date(),
