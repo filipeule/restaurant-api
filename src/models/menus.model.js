@@ -5,8 +5,15 @@ import { getGroupIdByName } from '../models/groups.model.js';
 
 async function getWeekMenus() {
   try {
+    const { startOfTheWeek, endOfTheWeek } = setNextWeekData(new Date());
+
     return await menusDb
-      .find({}, { '__v': 0 })
+      .find({
+        date: {
+          $gte: startOfTheWeek,
+          $lte: endOfTheWeek,
+        }
+      }, { '__v': 0 })
       .populate({
         path: 'meats',
         select: '-__v',
@@ -55,13 +62,7 @@ async function createWeekMenus() {
 async function generateWeekMenus(date) {
   const menusArray = [];
 
-  const dayOfWeek = date.getDay();
-
-  if (dayOfWeek === 6) {
-    date.setDate(date.getDate() + 2);
-  } else if (dayOfWeek === 0) {
-    date.setDate(date.getDate() + 1);
-  }
+  setDateToStartOfTheWeek(date);
 
   for (let i = 0; i <= 5 - date.getDay(); i++) {
     const menuDate = new Date(date);
@@ -69,7 +70,7 @@ async function generateWeekMenus(date) {
     menuDate.setDate(menuDate.getDate() + i);
 
     let newMenu = await generateRandomMenu(menuDate);
-    
+
     menusArray.push(newMenu);
   }
 
@@ -83,7 +84,7 @@ async function generateRandomProduct(group) {
 
   const randomProduct = await productsDb.findOne({ group: await getGroupIdByName(group) }).skip(randomNumber);
 
-  return randomProduct._id;
+  return randomProduct;
 }
 
 async function generateRandomMenu(date) {
@@ -110,26 +111,58 @@ async function generateRandomMenu(date) {
 
 async function verifyCreatedWeekMenus(date) {
   try {
-    const startOfTheWeek = new Date(date);
-    const endOfTheWeek = new Date(date);
-  
-    startOfTheWeek.setHours(0, 0, 0, 0 - date.getDay() * 24 * 60 * 60 * 1000);
-  
-    endOfTheWeek.setHours(23, 59, 59, 999);
-    endOfTheWeek.setDate(date.getDate() + (6 - date.getDay()));
-  
+    setDateToStartOfTheWeek(date);
+
+    const { startOfTheWeek, endOfTheWeek } = createStartAndEndOfTheWeek(date);
+
     const menuCount = await menusDb.countDocuments({
       date: {
         $gte: startOfTheWeek,
         $lte: endOfTheWeek,
       }
     });
-  
+
     if (menuCount > 0) return true;
-  
+
     return false;
   } catch (error) {
     throw new Error(error);
+  }
+}
+
+function setNextWeekData(date) {
+  setDateToStartOfTheWeek(date);
+
+  const { startOfTheWeek, endOfTheWeek } = createStartAndEndOfTheWeek(date);
+
+  return {
+    startOfTheWeek,
+    endOfTheWeek,
+  };
+}
+
+function setDateToStartOfTheWeek(date) {
+  const dayOfWeek = date.getDay();
+
+  if (dayOfWeek === 6) {
+    date.setDate(date.getDate() + 2);
+  } else if (dayOfWeek === 0) {
+    date.setDate(date.getDate() + 1);
+  }
+}
+
+function createStartAndEndOfTheWeek(date) {
+  const startOfTheWeek = new Date(date);
+  const endOfTheWeek = new Date(date);
+
+  startOfTheWeek.setHours(0, 0, 0, 0 - date.getDay() * 24 * 60 * 60 * 1000);
+
+  endOfTheWeek.setHours(23, 59, 59, 999);
+  endOfTheWeek.setDate(date.getDate() + (6 - date.getDay()));
+
+  return {
+    startOfTheWeek,
+    endOfTheWeek,
   }
 }
 
