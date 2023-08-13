@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import { populateGroupsCollection } from '../models/groups.model.js'
+import { populateGroupsCollection } from '../models/groups.model.js';
+import loginSeeder from '../db/seeders/login.seeder.js';
 
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -7,6 +8,8 @@ async function startDatabase() {
   await connect();
   
   await populateGroupsCollection();
+
+  await loginSeeder();
 }
 
 async function connect() {
